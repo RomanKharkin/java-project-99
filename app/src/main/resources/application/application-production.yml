@@ -1,0 +1,14 @@
+spring:
+  profiles: production
+  include: application.yml
+
+  datasource:
+    url: jdbc:postgresql://ru.hexlet.io/main_db_99
+    driver-class-name: org.postgresql.Driver
+    username:
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
