@@ -19,7 +19,6 @@ import java.time.LocalDate;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@SuppressWarnings("checkstyle:RegexpSingleline")
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
