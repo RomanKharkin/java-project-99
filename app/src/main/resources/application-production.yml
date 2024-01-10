@@ -1,12 +1,11 @@
 spring:
-  profiles: production
   include: application.yml
 
   datasource:
-    url: jdbc:postgresql://ru.hexlet.io/main_db_99
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    url: ${JDBC_DATABASE_URL}
     driver-class-name: org.postgresql.Driver
-    username:
-    password:
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
