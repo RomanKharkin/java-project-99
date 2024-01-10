@@ -43,3 +43,15 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+application { mainClass.set("hexlet.code.App") }
+
+tasks.jar {
+	manifest {
+		attributes(
+				mapOf(
+						"Main-Class" to "hexlet.code.App"
+				)
+		)
+	}
+}
