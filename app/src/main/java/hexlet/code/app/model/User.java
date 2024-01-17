@@ -1,11 +1,6 @@
 package hexlet.code.app.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -21,7 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "users")
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
 public class User implements BaseEntity {
@@ -38,7 +33,7 @@ public class User implements BaseEntity {
     private String email;
 
     @NotBlank
-    @Size(min = 8)
+    @Size(min = 3)
     private String password;
 
     @CreatedDate

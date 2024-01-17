@@ -1,9 +1,18 @@
-package hexlet.code.app.service;
+//package hexlet.code.app.service;
 
-import hexlet.code.app.dto.UserCreateDto;
-import hexlet.code.app.dto.UserDto;
+//import hexlet.code.app.dto.UserCreateDTO;
+//import hexlet.code.app.dto.UserDTO;
+//import hexlet.code.app.model.User;
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.stereotype.Repository;
+//
+//import java.util.Optional;
 
-public interface UserService {
-
-    UserDto createUser(UserCreateDto newUser);
-}
+//public interface UserService {
+//    UserDTO createUser(UserCreateDTO newUser);
+//}
+//
+//@Repository
+//public interface UserRepository extends JpaRepository<User, Long> {
+//    Optional<User> findByEmail(String email);
+//}
