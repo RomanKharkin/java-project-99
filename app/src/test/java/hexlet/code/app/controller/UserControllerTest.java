@@ -61,90 +61,90 @@ class UserControllerTest {
         assertThatJson(body).isArray();
     }
 
-//    @Test
-//    public void testShow() throws Exception {
-//
-//        userRepository.save(testUser);
-//
-//        var request = get("/api/users/{id}", testUser.getId());
-//        var result = mockMvc.perform(request)
-//                .andExpect(status().isOk())
-//                .andReturn();
-//        var body = result.getResponse().getContentAsString();
-//
-//        assertThatJson(body).and(
-//                v -> v.node("firstName").isEqualTo(testUser.getFirstName()),
-//                v -> v.node("lastName").isEqualTo(testUser.getLastName()),
-//                v -> v.node("email").isEqualTo(testUser.getEmail())
-//        );
-//    }
+    @Test
+    public void testShow() throws Exception {
 
-//    @Test
-//    public void testCreate() throws Exception {
-//        var dto = userMapper.map(testUser);
-//
-//        var request = post("/api/users")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(om.writeValueAsString(dto));
-//
-//        mockMvc.perform(request)
-//                .andExpect(status().isCreated());
-//
-//        var user = userRepository.findByEmail(testUser.getEmail()).get();
-//
-//        assertThat(user).isNotNull();
-//        assertThat(user.getFirstName()).isEqualTo(testUser.getFirstName());
-//        assertThat(user.getLastName()).isEqualTo(testUser.getLastName());
-//        assertThat(user.getPassword()).isEqualTo(testUser.getPassword());
-//    }
+        userRepository.save(testUser);
 
-//    @Test
-//    public void testCreateWithWrongEmail() throws Exception {
-//        var dto = userMapper.map(testUser);
-//        dto.setEmail("123@gmail.ru");
-//
-//        var request = post("/api/users")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(om.writeValueAsString(dto));
-//
-//        mockMvc.perform(request)
-//                .andExpect(status().isBadRequest());
-//    }
+        var request = get("/api/users/{id}", testUser.getId());
+        var result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+        var body = result.getResponse().getContentAsString();
 
-//    @Test
-//    public void testUpdate() throws Exception {
-//        userRepository.save(testUser);
-//
-//        var dto = userMapper.map(testUser);
-//
-//        dto.setFirstName("Roman");
-//        dto.setLastName("Kharkin");
-//        dto.setEmail("123@gmail.de");
-//        dto.setPassword("derParol");
-//
-//        var request = put("/api/users/{id}", testUser.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(om.writeValueAsString(dto));
-//
-//        mockMvc.perform(request)
-//                .andExpect(status().isOk());
-//
-//        var task = userRepository.findById(testUser.getId()).get();
-//
-//        assertThat(task.getFirstName()).isEqualTo(dto.getFirstName());
-//        assertThat(task.getLastName()).isEqualTo(dto.getLastName());
-//        assertThat(task.getEmail()).isEqualTo(dto.getEmail());
-//        assertThat(task.getPassword()).isEqualTo(dto.getPassword());
-//    }
+        assertThatJson(body).and(
+                v -> v.node("firstName").isEqualTo(testUser.getFirstName()),
+                v -> v.node("lastName").isEqualTo(testUser.getLastName()),
+                v -> v.node("email").isEqualTo(testUser.getEmail())
+        );
+    }
+
+    @Test
+    public void testCreate() throws Exception {
+        var dto = userMapper.map(testUser);
+
+        var request = post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isCreated());
+
+        var user = userRepository.findByEmail(testUser.getEmail()).get();
+
+        assertThat(user).isNotNull();
+        assertThat(user.getFirstName()).isEqualTo(testUser.getFirstName());
+        assertThat(user.getLastName()).isEqualTo(testUser.getLastName());
+        assertThat(user.getPassword()).isEqualTo(testUser.getPassword());
+    }
+
+    @Test
+    public void testCreateWithWrongEmail() throws Exception {
+        var dto = userMapper.map(testUser);
+        dto.setEmail("123gmail.ru");
+
+        var request = post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        userRepository.save(testUser);
+
+        var dto = userMapper.map(testUser);
+
+        dto.setFirstName("Roman");
+        dto.setLastName("Kharkin");
+        dto.setEmail("123@gmail.de");
+        dto.setPassword("derParol");
+
+        var request = put("/api/users/{id}", testUser.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var task = userRepository.findById(testUser.getId()).get();
+
+        assertThat(task.getFirstName()).isEqualTo(dto.getFirstName());
+        assertThat(task.getLastName()).isEqualTo(dto.getLastName());
+        assertThat(task.getEmail()).isEqualTo(dto.getEmail());
+        assertThat(task.getPassword()).isEqualTo(dto.getPassword());
+    }
 
 
-//    @Test
-//    public void testDestroy() throws Exception {
-//        userRepository.save(testUser);
-//        var request = delete("/api/users/{id}", testUser.getId());
-//        mockMvc.perform(request)
-//                .andExpect(status().isOk());
-//
-//        assertThat(userRepository.existsById(testUser.getId())).isEqualTo(false);
-//    }
+    @Test
+    public void testDestroy() throws Exception {
+        userRepository.save(testUser);
+        var request = delete("/api/users/{id}", testUser.getId());
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        assertThat(userRepository.existsById(testUser.getId())).isEqualTo(false);
+    }
 }
