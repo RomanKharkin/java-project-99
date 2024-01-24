@@ -4,16 +4,18 @@ import hexlet.code.app.dto.UserCreateDTO;
 import hexlet.code.app.dto.UserDTO;
 import hexlet.code.app.dto.UserUpdateDTO;
 import hexlet.code.app.model.User;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.openapitools.jackson.nullable.JsonNullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-//@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-//        componentModel = MappingConstants.ComponentModel.SPRING,
-//        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 @Mapper(
         uses = { JsonNullableMapper.class },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
@@ -21,9 +23,27 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class UserMapper {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @BeforeMapping
+    public void encryptPasswordCreate(UserCreateDTO data) {
+        var password = data.getPassword();
+        data.setPassword(passwordEncoder.encode(password));
+    }
+
+    @BeforeMapping
+    public void encryptPasswordUpdate(UserUpdateDTO data) {
+        var password = data.getPassword().get();
+        data.setPassword(JsonNullable.of(passwordEncoder.encode(password)));
+    }
+
+    @Mapping(source = "password", target = "passwordDigest")
     public abstract User map(UserCreateDTO dto);
 
     public abstract UserDTO map(User model);
 
+    @Mapping(source = "password", target = "passwordDigest")
     public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
 }

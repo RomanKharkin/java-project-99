@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.HashMap;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,10 +41,14 @@ class UserControllerTest {
     @Autowired
     private ModelGenerator modelGenerator;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private User testUser;
 
     @BeforeEach
     public void setUp() {
+
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
 
     }
@@ -81,21 +84,21 @@ class UserControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        var dto = userMapper.map(testUser);
+        var testUserCreateDTO = Instancio.of(modelGenerator.getUserCreateDTOModel()).create();
 
         var request = post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(dto));
+                .content(om.writeValueAsString(testUserCreateDTO));
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated());
 
-        var user = userRepository.findByEmail(testUser.getEmail()).get();
+        var user = userRepository.findByEmail(testUserCreateDTO.getEmail()).get();
 
         assertThat(user).isNotNull();
-        assertThat(user.getFirstName()).isEqualTo(testUser.getFirstName());
-        assertThat(user.getLastName()).isEqualTo(testUser.getLastName());
-        assertThat(user.getPassword()).isEqualTo(testUser.getPassword());
+        assertThat(user.getFirstName()).isEqualTo(testUserCreateDTO.getFirstName());
+        assertThat(user.getLastName()).isEqualTo(testUserCreateDTO.getLastName());
+
     }
 
     @Test
@@ -115,26 +118,21 @@ class UserControllerTest {
     public void testUpdate() throws Exception {
         userRepository.save(testUser);
 
-        var dto = userMapper.map(testUser);
-
-        dto.setFirstName("Roman");
-        dto.setLastName("Kharkin");
-        dto.setEmail("123@gmail.de");
-        dto.setPassword("derParol");
+        var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
 
         var request = put("/api/users/{id}", testUser.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(dto));
+                .content(om.writeValueAsString(userUpdateDto));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
 
-        var task = userRepository.findById(testUser.getId()).get();
+        var user = userRepository.findById(testUser.getId()).get();
 
-        assertThat(task.getFirstName()).isEqualTo(dto.getFirstName());
-        assertThat(task.getLastName()).isEqualTo(dto.getLastName());
-        assertThat(task.getEmail()).isEqualTo(dto.getEmail());
-        assertThat(task.getPassword()).isEqualTo(dto.getPassword());
+        assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
+        assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
+        assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
 
