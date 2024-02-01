@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,7 +57,7 @@ class UserControllerTest {
     @Test
     public void testIndex() throws Exception {
         userRepository.save(testUser);
-        var result = mockMvc.perform(get("/api/users"))
+        var result = mockMvc.perform(get("/api/users").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -69,10 +70,12 @@ class UserControllerTest {
 
         userRepository.save(testUser);
 
-        var request = get("/api/users/{id}", testUser.getId());
+        var request = get("/api/users/{id}", testUser.getId())
+                .with(user(testUser));
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andReturn();
+
         var body = result.getResponse().getContentAsString();
 
         assertThatJson(body).and(
@@ -86,7 +89,7 @@ class UserControllerTest {
     public void testCreate() throws Exception {
         var testUserCreateDTO = Instancio.of(modelGenerator.getUserCreateDTOModel()).create();
 
-        var request = post("/api/users")
+        var request = post("/api/users").with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(testUserCreateDTO));
 
@@ -106,7 +109,7 @@ class UserControllerTest {
         var dto = userMapper.map(testUser);
         dto.setEmail("123gmail.ru");
 
-        var request = post("/api/users")
+        var request = post("/api/users").with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(dto));
 
@@ -120,7 +123,7 @@ class UserControllerTest {
 
         var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
 
-        var request = put("/api/users/{id}", testUser.getId())
+        var request = put("/api/users/{id}", testUser.getId()).with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(userUpdateDto));
 
@@ -139,7 +142,7 @@ class UserControllerTest {
     @Test
     public void testDestroy() throws Exception {
         userRepository.save(testUser);
-        var request = delete("/api/users/{id}", testUser.getId());
+        var request = delete("/api/users/{id}", testUser.getId()).with(user(testUser));
         mockMvc.perform(request)
                 .andExpect(status().isOk());
 

@@ -25,6 +25,11 @@ public class CustomUserDetailsService implements UserDetailsManager {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return user;
     }
+    public UserDetails loadUserByUserId(long userId) throws UsernameNotFoundException {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user;
+    }
 
     @Override
     public void createUser(UserDetails userData) {
@@ -58,5 +63,6 @@ public class CustomUserDetailsService implements UserDetailsManager {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'userExists'");
     }
+
 }
 

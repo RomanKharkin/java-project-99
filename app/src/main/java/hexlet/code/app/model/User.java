@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -50,6 +51,7 @@ public class User implements BaseEntity, UserDetails {
     @LastModifiedDate
     private LocalDate updatedAt;
 
+
 //    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 //    private List<Article> articles = new ArrayList<>();
 //
@@ -61,12 +63,12 @@ public class User implements BaseEntity, UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return getPasswordDigest();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return getEmail();
     }
 
     @Override
