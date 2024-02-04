@@ -42,12 +42,13 @@ public class UserController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    List<UserDTO> index() {
+    ResponseEntity<List<UserDTO>> index() {
         List<User> users = userRepository.findAll();
         var result = users.stream()
                 .map(userMapper::map)
                 .toList();
-        return result;
+        return ResponseEntity.ok().header("X-Total-Count", String.valueOf(result.stream()
+                .count())).body(result);
     }
 
     @PostMapping(path = "")
