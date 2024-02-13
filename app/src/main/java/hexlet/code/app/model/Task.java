@@ -1,9 +1,11 @@
 package hexlet.code.app.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,32 +21,32 @@ import java.util.Collection;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "task_statuses")
+@Table(name = "tasks")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class TaskStatus implements BaseEntity {
-
+public class Task implements BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
+    private Integer index;
+
+    @NotBlank
+    private String description;
+
+    @ManyToOne
+    private TaskStatus status;
+
+    @ManyToOne
+    @NotNull
+    private User assignee;
+
     @NotBlank
     private String name;
 
-    @NotNull
-    private Slug slug;
-
     @CreatedDate
     private LocalDate createdAt;
-
-    public enum Slug {
-        draft,
-        to_review,
-        to_be_fixed,
-        to_publish,
-        published;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

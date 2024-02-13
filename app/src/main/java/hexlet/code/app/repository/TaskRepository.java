@@ -1,12 +1,12 @@
 package hexlet.code.app.repository;
 
-import hexlet.code.app.model.TaskStatus;
+import hexlet.code.app.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface TaskStatusRepository extends JpaRepository<TaskStatus, Long> {
-    Optional<TaskStatus> findByName(String name);
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    Optional<Task> findByName(String name);
 }

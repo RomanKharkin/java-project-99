@@ -2,7 +2,9 @@ package hexlet.code.app.util;
 
 import hexlet.code.app.dto.UserCreateDTO;
 import hexlet.code.app.dto.UserUpdateDTO;
+import hexlet.code.app.model.Task;
 import hexlet.code.app.model.TaskStatus;
+import hexlet.code.app.model.TaskStatus.Slug;
 import hexlet.code.app.model.User;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -15,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import static hexlet.code.app.model.TaskStatus.Slug.to_be_fixed;
-
 @Getter
 @Component
 public class ModelGenerator {
@@ -26,6 +26,7 @@ public class ModelGenerator {
     private Model<UserCreateDTO>  userCreateDTOModel;
     private Model<UserUpdateDTO>  userUpdateDTOModel;
     private Model<TaskStatus>  taskStatusModel;
+    private Model<Task>  taskModel;
 
     Faker faker = new Faker();
 
@@ -57,7 +58,14 @@ public class ModelGenerator {
         taskStatusModel = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
                 .supply(Select.field(TaskStatus::getName), () -> faker.name().firstName())
-                .supply(Select.field(TaskStatus::getSlug), () -> to_be_fixed)
+                .supply(Select.field(TaskStatus::getSlug), () -> Slug.to_be_fixed)
+                .toModel();
+
+        taskModel = Instancio.of(Task.class)
+                .ignore(Select.field(Task::getId))
+                .supply(Select.field(Task::getIndex), () -> 5)
+                .supply(Select.field(Task::getDescription), () -> faker.text().text())
+                .supply(Select.field(Task::getName), () -> faker.name().firstName())
                 .toModel();
     }
 
