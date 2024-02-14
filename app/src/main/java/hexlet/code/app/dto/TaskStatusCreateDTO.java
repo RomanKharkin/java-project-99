@@ -1,8 +1,7 @@
 package hexlet.code.app.dto;
 
-import hexlet.code.app.model.TaskStatus.Slug;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +11,7 @@ public class TaskStatusCreateDTO {
     @NotBlank
     private String name;
 
-    @NotNull
-    private Slug slug;
+    @NotBlank
+    @Column(unique = true)
+    private String slug;
 }

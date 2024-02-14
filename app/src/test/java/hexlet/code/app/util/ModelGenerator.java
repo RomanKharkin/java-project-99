@@ -2,9 +2,9 @@ package hexlet.code.app.util;
 
 import hexlet.code.app.dto.UserCreateDTO;
 import hexlet.code.app.dto.UserUpdateDTO;
+import hexlet.code.app.model.Label;
 import hexlet.code.app.model.Task;
 import hexlet.code.app.model.TaskStatus;
-import hexlet.code.app.model.TaskStatus.Slug;
 import hexlet.code.app.model.User;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -23,10 +23,11 @@ public class ModelGenerator {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private Model<User> userModel;
-    private Model<UserCreateDTO>  userCreateDTOModel;
-    private Model<UserUpdateDTO>  userUpdateDTOModel;
-    private Model<TaskStatus>  taskStatusModel;
-    private Model<Task>  taskModel;
+    private Model<UserCreateDTO> userCreateDTOModel;
+    private Model<UserUpdateDTO> userUpdateDTOModel;
+    private Model<TaskStatus> taskStatusModel;
+    private Model<Task> taskModel;
+    private Model<Label> labelModel;
 
     Faker faker = new Faker();
 
@@ -58,7 +59,7 @@ public class ModelGenerator {
         taskStatusModel = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
                 .supply(Select.field(TaskStatus::getName), () -> faker.name().firstName())
-                .supply(Select.field(TaskStatus::getSlug), () -> Slug.to_be_fixed)
+                .supply(Select.field(TaskStatus::getSlug), () -> faker.name().title())
                 .toModel();
 
         taskModel = Instancio.of(Task.class)
@@ -66,6 +67,11 @@ public class ModelGenerator {
                 .supply(Select.field(Task::getIndex), () -> 5)
                 .supply(Select.field(Task::getDescription), () -> faker.text().text())
                 .supply(Select.field(Task::getName), () -> faker.name().firstName())
+                .toModel();
+
+        labelModel = Instancio.of(Label.class)
+                .ignore(Select.field(Label::getId))
+                .supply(Select.field(Label::getName), () -> faker.name().firstName())
                 .toModel();
     }
 

@@ -1,13 +1,11 @@
 package hexlet.code.app.controller;
 
-
+import hexlet.code.app.dto.LabelCreateDTO;
 import hexlet.code.app.dto.LabelDTO;
-import hexlet.code.app.dto.TaskStatusCreateDTO;
-import hexlet.code.app.dto.TaskStatusDTO;
-import hexlet.code.app.dto.TaskStatusUpdateDTO;
+import hexlet.code.app.dto.LabelUpdateDTO;
 import hexlet.code.app.exception.ResourceNotFoundException;
-import hexlet.code.app.mapper.TaskStatusMapper;
-import hexlet.code.app.repository.TaskStatusRepository;
+import hexlet.code.app.mapper.LabelMapper;
+import hexlet.code.app.repository.LabelRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,20 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/task_statuses")
-public class TaskStatusController {
+@RequestMapping("/api/labels")
+public class LabelController {
     @Autowired
-    private TaskStatusRepository taskStatusRepository;
+    private LabelRepository labelRepository;
 
     @Autowired
-    private TaskStatusMapper taskStatusMapper;
+    private LabelMapper labelMapper;
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<List<TaskStatusDTO>> index() {
-        var taskStatuss = taskStatusRepository.findAll();
-        var result = taskStatuss.stream()
-                .map(taskStatusMapper::map)
+    ResponseEntity<List<LabelDTO>> index() {
+        var labels = labelRepository.findAll();
+        var result = labels.stream()
+                .map(labelMapper::map)
                 .toList();
         return ResponseEntity
                 .ok()
@@ -47,12 +45,13 @@ public class TaskStatusController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    TaskStatusDTO create(@Valid @RequestBody TaskStatusCreateDTO taskStatusData) {
-            var taskStatus = taskStatusMapper.map(taskStatusData);
-            taskStatusRepository.save(taskStatus);
-            var taskStatusDTO = taskStatusMapper.map(taskStatus);
-            return taskStatusDTO;
+    LabelDTO create(@Valid @RequestBody LabelCreateDTO labelData) {
+        var label = labelMapper.map(labelData);
+        labelRepository.save(label);
+        var labelDTO = labelMapper.map(label);
+        return labelDTO;
     }
+
     public class BadRequestException extends RuntimeException {
         public BadRequestException(String message) {
             super(message);
@@ -61,30 +60,29 @@ public class TaskStatusController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    TaskStatusDTO show(@PathVariable Long id) {
-        var taskStatus = taskStatusRepository.findById(id)
+    LabelDTO show(@PathVariable Long id) {
+        var label = labelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
-        var taskStatusDTO = taskStatusMapper.map(taskStatus);
-        return taskStatusDTO;
+        var labelDTO = labelMapper.map(label);
+        return labelDTO;
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    TaskStatusDTO update(@RequestBody @Valid TaskStatusUpdateDTO taskStatusData, @PathVariable Long id) {
-        var taskStatus = taskStatusRepository.findById(id)
+    LabelDTO update(@RequestBody @Valid LabelUpdateDTO labelData, @PathVariable Long id) {
+        var label = labelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
-        taskStatusMapper.update(taskStatusData, taskStatus);
-        taskStatusRepository.save(taskStatus);
-        var taskStatusDTO = taskStatusMapper.map(taskStatus);
-        return taskStatusDTO;
+        labelMapper.update(labelData, label);
+        labelRepository.save(label);
+        var labelDTO = labelMapper.map(label);
+        return labelDTO;
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     void delete(@PathVariable Long id) {
-        var task = taskStatusRepository.findById(id)
+        var label = labelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found"));
-        taskStatusRepository.deleteById(id);
+        labelRepository.deleteById(id);
     }
 }
-

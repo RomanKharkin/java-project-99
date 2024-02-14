@@ -46,6 +46,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Разрешаем доступ только к /api/login, чтобы аутентифицироваться и получить токен
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/task_statuses/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/task_statuses").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api").permitAll()

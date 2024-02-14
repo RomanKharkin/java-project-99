@@ -7,13 +7,11 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class TaskStatusDTO {
+public class LabelDTO {
 
     private long id;
 
     private String name;
-
-    private String slug;
 
     private LocalDate createdAt;
 }

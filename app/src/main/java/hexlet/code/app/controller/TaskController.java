@@ -9,6 +9,7 @@ import hexlet.code.app.repository.TaskRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,12 +33,14 @@ public class TaskController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    List<TaskDTO> index() {
+    ResponseEntity<List<TaskDTO>> index() {
         var tasks = taskRepository.findAll();
         var result = tasks.stream()
                 .map(taskMapper::map)
                 .toList();
-        return result;
+        return ResponseEntity
+                .ok()
+                .header("X-Total-Count", String.valueOf(result.stream().count())).body(result);
     }
 
     @PostMapping("")

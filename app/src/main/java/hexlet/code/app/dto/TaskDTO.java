@@ -1,5 +1,7 @@
 package hexlet.code.app.dto;
 
+import hexlet.code.app.model.Label;
+import hexlet.code.app.model.TaskStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,10 +11,11 @@ import java.time.LocalDate;
 @Setter
 public class TaskDTO {
     private long id;
-    private Long assigneeId;
+    private Long assignee_id;
     private Integer index;
     private String content;
-    private TaskStatusDTO status;
+    private TaskStatus status;
     private String title;
+    private Label label;
     private LocalDate createdAt;
 }

@@ -1,5 +1,6 @@
 package hexlet.code.app.dto;
 
+import hexlet.code.app.model.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,7 +16,9 @@ public class TaskUpdateDTO {
         @NotBlank
         private JsonNullable<String> content;
 
-        private JsonNullable<TaskStatusDTO> status;
+        private JsonNullable<TaskStatus> status;
+
+        private JsonNullable<LabelDTO> label;
 
         @NotBlank
         private JsonNullable<String> title;
