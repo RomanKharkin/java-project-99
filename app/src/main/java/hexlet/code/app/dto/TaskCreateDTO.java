@@ -1,5 +1,7 @@
 package hexlet.code.app.dto;
 
+
+import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -19,9 +21,10 @@ public class TaskCreateDTO {
     @NotBlank
     private String content;
 
+    @JoinColumn(unique = true)
     private String status;
 
-    private Set<Long> taskLabelIds; // set list
+    private Set<Long> taskLabelIds;
 
     @NotBlank
     private String title;

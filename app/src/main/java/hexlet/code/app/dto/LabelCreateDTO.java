@@ -13,4 +13,6 @@ public class LabelCreateDTO {
     @Column(unique = true)
     @Size(min = 3, max = 1000)
     private String name;
+
+    private String slug;
 }

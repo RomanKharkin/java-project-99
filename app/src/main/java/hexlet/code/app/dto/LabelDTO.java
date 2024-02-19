@@ -11,6 +11,8 @@ public class LabelDTO {
 
     private long id;
 
+    private String slug;
+
     private String name;
 
     private LocalDate createdAt;

@@ -6,6 +6,7 @@ import hexlet.code.app.dto.TaskUpdateDTO;
 import hexlet.code.app.exception.ResourceNotFoundException;
 import hexlet.code.app.mapper.TaskMapper;
 import hexlet.code.app.repository.TaskRepository;
+import hexlet.code.app.repository.TaskStatusRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,8 @@ import java.util.List;
 public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private TaskStatusRepository taskStatusRepository;
 
     @Autowired
     private TaskMapper taskMapper;
@@ -46,11 +49,14 @@ public class TaskController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
+        var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus()).get();
         var task = taskMapper.map(taskData);
+        task.setTaskStatus(taskStatus);
         taskRepository.save(task);
         var taskDTO = taskMapper.map(task);
         return taskDTO;
     }
+
     public class BadRequestException extends RuntimeException {
         public BadRequestException(String message) {
             super(message);

@@ -1,6 +1,8 @@
 package hexlet.code.app.dto;
 
 import hexlet.code.app.model.TaskStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,12 +13,13 @@ import org.openapitools.jackson.nullable.JsonNullable;
 @Setter
 public class TaskUpdateDTO {
         @NotNull
-        private JsonNullable<Long> assigneeId;
+        private JsonNullable<Long> assignee_id;
 
         @NotBlank
         private JsonNullable<String> content;
 
-        private JsonNullable<TaskStatus> status;
+        @JoinColumn(unique = true)
+        private JsonNullable<String> slug;
 
         private JsonNullable<LabelDTO> label;
 
