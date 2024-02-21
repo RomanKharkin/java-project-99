@@ -1,7 +1,6 @@
 package hexlet.code.app.dto;
 
-import hexlet.code.app.model.TaskStatus;
-import jakarta.persistence.Column;
+
 import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

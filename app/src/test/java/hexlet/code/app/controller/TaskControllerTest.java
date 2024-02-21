@@ -12,6 +12,7 @@ import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.util.ModelGenerator;
 import org.instancio.Instancio;
+import org.instancio.Select;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,7 +65,6 @@ public class TaskControllerTest {
     private Task testTask;
     private User testUser;
     private TaskStatus testTaskStatus;
-    private TaskStatus testTaskStatus1;
     private Set<Label> testLabels;
     private Label testLabel;
 
@@ -81,10 +84,26 @@ public class TaskControllerTest {
 
         testTask = Instancio.of(modelGenerator.getTaskModel()).create();
         testTask.setAssignee(testUser);
-        testTask.setTaskStatus(Instancio.of(modelGenerator.getTaskStatusModel()).create());
+        testTask.setTaskStatus(testTaskStatus);
         testTask.setLabels(testLabels);
         taskRepository.save(testTask);
     }
+
+//    List<TaskStatus> statuses = taskStatusRepository.findAll();
+//    List<Label> labels = labelRepository.findAll();
+//
+//        IntStream.range(1, 30).forEach(i -> {
+//        var randomIndex = faker.number().numberBetween(0, statuses.size());
+//        var task = Instancio.of(Task.class)
+//                .ignore(Select.field(Task::getId))
+//                .supply(Select.field(Task::getIndex), () -> faker.number().positive())
+//                .supply(Select.field(Task::getDescription), () -> faker.text().text())
+//                .supply(Select.field(Task::getName), () -> faker.name().firstName())
+//                .supply(Select.field(Task::getTaskStatus), () -> statuses.get(randomIndex))
+////                    .supply(Select.field(Task::getLabels), () -> labels.get(randomIndex))
+//                .create();
+//        taskRepository.save(task);
+//    });
 
     @Test
     public void testIndex() throws Exception {
@@ -114,23 +133,28 @@ public class TaskControllerTest {
         );
     }
 
-//    @Test
-//    public void testCreate() throws Exception {
-//        var dto = mapper.map(testTask);
-//
-//        var request = post("/api/tasks").with(user(testUser))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(om.writeValueAsString(dto));
-//
-//        mockMvc.perform(request)
-//                .andExpect(status().isCreated());
-//
+    @Test
+    public void testCreate() throws Exception {
+        var dto = mapper.map(testTask);
+        var request = post("/api/tasks").with(user(testUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+        mockMvc.perform(request)
+                .andExpect(status().isCreated());
+
+        // Получить все задачи из репозитория
+        Iterable<Task> tasks = taskRepository.findAll();
+        // Проверить, что среди всех задач есть созданная задача
+        boolean isTestTaskCreated = StreamSupport.stream(tasks.spliterator(), false)
+                .anyMatch(task -> task.getName().equals(testTask.getName()));
+        assertThat(isTestTaskCreated).isTrue();
+
 //        var task = taskRepository.findByName(testTask.getName()).get();
 //
 //        assertThat(task).isNotNull();
 //        assertThat(task.getName()).isEqualTo(testTask.getName());
 //        assertThat(task.getDescription()).isEqualTo(testTask.getDescription());
-//    }
+    }
 
     @Test
     public void testCreateWithWrongStatus() throws Exception {

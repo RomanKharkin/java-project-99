@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -38,8 +37,7 @@ public class Task implements BaseEntity {
     @NotBlank
     private String description;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(unique = true)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private TaskStatus taskStatus;
 
     @ManyToOne

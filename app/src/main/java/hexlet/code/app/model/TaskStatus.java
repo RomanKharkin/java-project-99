@@ -26,6 +26,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class TaskStatus implements BaseEntity {
 
     @Id
+    @Column(unique = true)
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 

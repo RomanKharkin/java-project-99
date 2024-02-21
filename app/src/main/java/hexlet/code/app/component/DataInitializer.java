@@ -7,15 +7,21 @@ import hexlet.code.app.dto.UserCreateDTO;
 import hexlet.code.app.mapper.LabelMapper;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.mapper.UserMapper;
+import hexlet.code.app.model.Task;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.instancio.Instancio;
+import org.instancio.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Component
 @AllArgsConstructor
