@@ -11,13 +11,11 @@ import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.specification.TaskSpecification;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -37,7 +35,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params, @RequestParam(defaultValue = "1") int page) {
         var spec = specBuilder.build(params);
-        var tasks = taskRepository.findAll(spec, PageRequest.of(page - 1, 10));
+        var tasks = taskRepository.findAll(spec);
 
         var result = tasks.stream()
                 .map(taskMapper::map)
@@ -46,19 +44,6 @@ public class TaskController {
                 .ok()
                 .header("X-Total-Count", String.valueOf(result.stream().count())).body(result);
     }
-
-//    @GetMapping("")
-//    @ResponseStatus(HttpStatus.OK)
-//    ResponseEntity<List<TaskDTO>> index() {
-//        var tasks = taskRepository.findAll();
-//
-//        var result = tasks.stream()
-//                .map(taskMapper::map)
-//                .toList();
-//        return ResponseEntity
-//                .ok()
-//                .header("X-Total-Count", String.valueOf(result.stream().count())).body(result);
-//    }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)

@@ -11,8 +11,8 @@ import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.util.ModelGenerator;
+import net.datafaker.Faker;
 import org.instancio.Instancio;
-import org.instancio.Select;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +67,8 @@ public class TaskControllerTest {
     private Set<Label> testLabels;
     private Label testLabel;
 
+    Faker faker = new Faker();
+
 
     @BeforeEach
     public void setUp() {
@@ -87,23 +88,37 @@ public class TaskControllerTest {
         testTask.setTaskStatus(testTaskStatus);
         testTask.setLabels(testLabels);
         taskRepository.save(testTask);
+
+
+        IntStream.range(1, 5).forEach(i -> {
+            var label = new Label();
+            label.setName(faker.name().title());
+            labelRepository.save(label);
+        });
+        List<Label> listLabels = labelRepository.findAll();
+
+        List<TaskStatus> taskStatuses = taskStatusRepository.findAll();
+
+        IntStream.range(1, 20).forEach(i -> {
+            var randomStatusIndex = faker.number().numberBetween(0, taskStatuses.size());
+
+            Set<Label> labels = new HashSet<>();
+            var randomLabelIndex1 = faker.number().numberBetween(0, listLabels.size());
+            var randomLabelIndex2 = faker.number().numberBetween(0, listLabels.size());
+            labels.add(listLabels.get(randomLabelIndex1));
+            labels.add(listLabels.get(randomLabelIndex2));
+
+            var task = new Task();
+            task.setName(faker.book().title());
+            var description = faker.text().text();
+            task.setDescription(description);
+            task.setTaskStatus(taskStatuses.get(randomStatusIndex));
+            task.setLabels(labels);
+            task.setAssignee(testUser);
+            taskRepository.save(task);
+        });
     }
 
-//    List<TaskStatus> statuses = taskStatusRepository.findAll();
-//    List<Label> labels = labelRepository.findAll();
-//
-//        IntStream.range(1, 30).forEach(i -> {
-//        var randomIndex = faker.number().numberBetween(0, statuses.size());
-//        var task = Instancio.of(Task.class)
-//                .ignore(Select.field(Task::getId))
-//                .supply(Select.field(Task::getIndex), () -> faker.number().positive())
-//                .supply(Select.field(Task::getDescription), () -> faker.text().text())
-//                .supply(Select.field(Task::getName), () -> faker.name().firstName())
-//                .supply(Select.field(Task::getTaskStatus), () -> statuses.get(randomIndex))
-////                    .supply(Select.field(Task::getLabels), () -> labels.get(randomIndex))
-//                .create();
-//        taskRepository.save(task);
-//    });
 
     @Test
     public void testIndex() throws Exception {
@@ -115,6 +130,63 @@ public class TaskControllerTest {
         var body = result.getResponse().getContentAsString();
         assertThatJson(body).isArray();
     }
+
+    @Test
+    public void testIndexWithStatus() throws Exception {
+        var result = mockMvc.perform(get("/api/tasks?Status=draft").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("status").asString().containsIgnoringCase("draft"))
+        );
+    }
+
+    @Test
+    public void testIndexWithLabelId() throws Exception {
+        var result = mockMvc.perform(get("/api/tasks?LabelId=1").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("taskLabelIds").isArray().contains(1))
+        );
+    }
+
+    @Test
+    public void testIndexWithAssigneeId() throws Exception {
+        var result = mockMvc.perform(get("/api/tasks?AssigneeId=2").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("assignee_id").isEqualTo(2))
+        );
+    }
+
+    @Test
+    public void testIndexWithTitleCont() throws Exception {
+        var task = taskRepository.findById(1L).get();
+        task.setName("TestTitle");
+        taskRepository.save(task);
+
+        var result = mockMvc.perform(get("/api/tasks?TitleCont=TestTitle").with(user(testUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray().allSatisfy(element ->
+                assertThatJson(element)
+                        .and(v -> v.node("title").asString().containsIgnoringCase("TestTitle"))
+        );
+    }
+
 
     @Test
     public void testShow() throws Exception {

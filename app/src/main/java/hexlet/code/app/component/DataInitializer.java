@@ -7,20 +7,23 @@ import hexlet.code.app.dto.UserCreateDTO;
 import hexlet.code.app.mapper.LabelMapper;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import hexlet.code.app.mapper.UserMapper;
-import hexlet.code.app.model.Task;
+import hexlet.code.app.model.Label;
 import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
+import hexlet.code.app.repository.TaskRepository;
+import hexlet.code.app.model.Task;
 import hexlet.code.app.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.instancio.Instancio;
-import org.instancio.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import net.datafaker.Faker;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 @Component
@@ -32,6 +35,8 @@ public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
     @Autowired
     private final TaskStatusRepository taskStatusRepository;
+    @Autowired
+    private final TaskRepository taskRepository;
     @Autowired
     private final LabelRepository labelRepository;
 
@@ -85,5 +90,36 @@ public class DataInitializer implements ApplicationRunner {
         labelCreateDTO.setName("bug");
         var label2 = labelMapper.map(labelCreateDTO);
         labelRepository.save(label2);
+
+
+        var faker = new Faker();
+
+        IntStream.range(1, 10).forEach(i -> {
+            var label = new Label();
+            label.setName(faker.name().title());
+            labelRepository.save(label);
+        });
+        List<Label> listLabels = labelRepository.findAll();
+
+        List<TaskStatus> taskStatuses = taskStatusRepository.findAll();
+
+        IntStream.range(1, 30).forEach(i -> {
+            var randomStatusIndex = faker.number().numberBetween(0, taskStatuses.size());
+
+            Set<Label> labels = new HashSet<>();
+            var randomLabelIndex1 = faker.number().numberBetween(0, listLabels.size());
+            var randomLabelIndex2 = faker.number().numberBetween(0, listLabels.size());
+            labels.add(listLabels.get(randomLabelIndex1));
+            labels.add(listLabels.get(randomLabelIndex2));
+
+            var task = new Task();
+            task.setName(faker.book().title());
+            var description = faker.text().text();
+            task.setDescription(description);
+            task.setTaskStatus(taskStatuses.get(randomStatusIndex));
+            task.setLabels(labels);
+            task.setAssignee(user);
+            taskRepository.save(task);
+        });
     }
 }
