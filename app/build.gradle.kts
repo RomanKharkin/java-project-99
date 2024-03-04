@@ -3,6 +3,7 @@ plugins {
 	id("io.freefair.lombok") version "8.4"
 	id("org.springframework.boot") version "3.2.0"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("io.sentry.jvm.gradle") version "4.3.1"
 }
 
 group = "hexlet.code.app"
@@ -20,6 +21,7 @@ repositories {
 
 dependencies {
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
+	implementation ("io.sentry:sentry-spring-boot-starter:7.5.0")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	runtimeOnly("com.h2database:h2")
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -31,6 +33,9 @@ dependencies {
 	implementation("org.instancio:instancio-junit:3.3.1")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.postgresql:postgresql:42.6.0")
+
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation(platform("org.junit:junit-bom:5.10.0"))
 	testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")

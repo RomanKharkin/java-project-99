@@ -90,11 +90,11 @@ public class TaskControllerTest {
         taskRepository.save(testTask);
 
 
-        IntStream.range(1, 5).forEach(i -> {
-            var label = new Label();
-            label.setName(faker.name().title());
-            labelRepository.save(label);
-        });
+//        IntStream.range(1, 5).forEach(i -> {
+//            var label = new Label();
+//            label.setName(faker.name().title());
+//            labelRepository.save(label);
+//        });
         List<Label> listLabels = labelRepository.findAll();
 
         List<TaskStatus> taskStatuses = taskStatusRepository.findAll();

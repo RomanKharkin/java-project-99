@@ -50,4 +50,8 @@ build
 
 # IDEs and editors
 .run
-app/database.*
+app/database
+
+
+
+/app/node_modules/
