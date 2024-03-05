@@ -100,11 +100,11 @@ public class TaskControllerTest {
         List<TaskStatus> taskStatuses = taskStatusRepository.findAll();
 
         IntStream.range(1, 20).forEach(i -> {
-            var randomStatusIndex = faker.number().numberBetween(0, taskStatuses.size());
+            var randomStatusIndex = faker.number().numberBetween(1, taskStatuses.size());
 
             Set<Label> labels = new HashSet<>();
-            var randomLabelIndex1 = faker.number().numberBetween(0, listLabels.size());
-            var randomLabelIndex2 = faker.number().numberBetween(0, listLabels.size());
+            var randomLabelIndex1 = faker.number().numberBetween(1, listLabels.size());
+            var randomLabelIndex2 = faker.number().numberBetween(1, listLabels.size());
             labels.add(listLabels.get(randomLabelIndex1));
             labels.add(listLabels.get(randomLabelIndex2));
 
