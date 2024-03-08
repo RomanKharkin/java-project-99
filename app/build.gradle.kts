@@ -14,6 +14,10 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_20
 }
 
+jacoco {
+	toolVersion = "0.8.9"
+}
+
 repositories {
 	mavenCentral()
 	maven { url = uri("https://repo.spring.io/milestone") }
