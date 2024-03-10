@@ -46,23 +46,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Разрешаем доступ только к /api/login, чтобы аутентифицироваться и получить токен
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
-                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
+//                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/task_statuses/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/task_statuses").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api").permitAll()
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/index.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/assets/**").permitAll()
-//                        .requestMatchers("/api/users/{userId}/**").access((
-//                                Supplier<Authentication> authentication,
-//                                RequestAuthorizationContext context
-//                        ) -> {
-//                            var userName = authentication.get().getName();
-//                            var pathUserId = context.getVariables().get("userId");
-//                            var pathUserName  = userService.loadUserByUserId(Long.parseLong(pathUserId)).getUsername();
-//                            return new AuthorizationDecision(userName.equals(pathUserName));
-//                        })
+                        .requestMatchers("/api/users/{userId}/**").access((
+                                Supplier<Authentication> authentication,
+                                RequestAuthorizationContext context
+                        ) -> {
+                            var userName = authentication.get().getName();
+                            var pathUserId = context.getVariables().get("userId");
+                            var pathUserName  = userService.loadUserByUserId(Long.parseLong(pathUserId)).getUsername();
+                            return new AuthorizationDecision(userName.equals(pathUserName));
+                        })
 
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
