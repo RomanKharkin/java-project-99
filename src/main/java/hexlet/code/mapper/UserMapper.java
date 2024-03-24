@@ -36,7 +36,7 @@ public abstract class UserMapper {
     @BeforeMapping
     public void encryptPasswordUpdate(UserUpdateDTO data) {
         var password = data.getPassword();
-        if (password.isPresent()) {
+        if (password != null && password.isPresent()) {
             data.setPassword(JsonNullable.of(passwordEncoder.encode(password.get())));
         }
     }
