@@ -1,3 +1,6 @@
+
+
+
 setup:
 	gradle wrapper --gradle-version 8.5
 
@@ -8,7 +11,7 @@ build:
 	./gradlew clean build
 
 run-dist:
-	./build/install/app/bin/app -h
+	./build/install/bin/-h
 
 install:
 	./gradlew clean install
@@ -19,7 +22,7 @@ run:
 	./gradlew run
 
 run-dist:
-	./build/install/app/bin/app
+	./build/install/bin/app
 
 stop:
 	./gradlew stop
