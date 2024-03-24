@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("@userUtils.isSelf(#id)")
     void delete(@PathVariable Long id) {
         var task = userRepository.findById(id)

@@ -145,7 +145,7 @@ class UserControllerTest {
         userRepository.save(testUser);
         var request = delete("/api/users/{id}", testUser.getId()).with(user(testUser));
         mockMvc.perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertThat(userRepository.existsById(testUser.getId())).isEqualTo(false);
     }
