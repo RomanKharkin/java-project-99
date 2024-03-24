@@ -71,7 +71,7 @@ public class TaskStatusController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable Long id) {
         var task = taskStatusRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found"));

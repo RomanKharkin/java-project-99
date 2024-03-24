@@ -135,7 +135,7 @@ public class TaskStatusControllerTest {
         taskStatusRepository.save(testTaskStatus);
         var request = delete("/api/task_statuses/{id}", testTaskStatus.getId()).with(user(testUser));
         mockMvc.perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertThat(taskStatusRepository.existsById(testTaskStatus.getId())).isEqualTo(false);
     }
