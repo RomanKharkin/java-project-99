@@ -6,7 +6,9 @@ import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
+import hexlet.code.model.User;
 import hexlet.code.repository.TaskRepository;
+import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.specification.TaskSpecification;
 import jakarta.validation.Valid;
@@ -33,6 +35,8 @@ public class TaskController {
 
     private final TaskRepository taskRepository;
 
+    private final UserRepository userRepository;
+
     private final TaskStatusRepository taskStatusRepository;
 
     private final TaskMapper taskMapper;
@@ -58,12 +62,21 @@ public class TaskController {
     TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
         var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus())
                 .orElseThrow(() -> new RuntimeException("Task status not found"));
+
+        // Получаем пользователя по его идентификатору
+        User assignee = userRepository.findById(taskData.getAssignee_id())
+                .orElseThrow(() -> new RuntimeException("Assignee not found"));
+
         var task = taskMapper.map(taskData);
         task.setTaskStatus(taskStatus);
+        // Устанавливаем пользователя в задачу
+        task.setAssignee(assignee);
+
         taskRepository.save(task);
         var taskDTO = taskMapper.map(task);
         return taskDTO;
     }
+
 
 
     public class BadRequestException extends RuntimeException {
