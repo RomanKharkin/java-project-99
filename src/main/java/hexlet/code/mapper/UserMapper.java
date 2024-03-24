@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Mapper(
-        uses = { JsonNullableMapper.class },
+        uses = {JsonNullableMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
@@ -35,8 +35,10 @@ public abstract class UserMapper {
 
     @BeforeMapping
     public void encryptPasswordUpdate(UserUpdateDTO data) {
-        var password = data.getPassword().get();
-        data.setPassword(JsonNullable.of(passwordEncoder.encode(password)));
+        var password = data.getPassword();
+        if (password.isPresent()) {
+            data.setPassword(JsonNullable.of(passwordEncoder.encode(password.get())));
+        }
     }
 
     @Mapping(source = "password", target = "passwordDigest")
