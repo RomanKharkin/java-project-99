@@ -55,11 +55,6 @@ public class User implements BaseEntity, UserDetails {
     @OneToMany(mappedBy = "assignee")
     private List<Task> tasks = new ArrayList<>();
 
-
-//    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-//    private List<Article> articles = new ArrayList<>();
-//
-//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<GrantedAuthority>();

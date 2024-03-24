@@ -14,7 +14,7 @@ import java.util.Set;
 public class TaskCreateDTO {
     private Integer index;
 
-//    @NotNull
+    @NotNull
     @SuppressWarnings("checkstyle:MemberName")
     private Long assignee_id;
 

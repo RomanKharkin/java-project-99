@@ -57,6 +57,18 @@ public class TaskController {
                 .header("X-Total-Count", String.valueOf(result.stream().count())).body(result);
     }
 
+//    @PostMapping("")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
+//        var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus())
+//                .orElseThrow(() -> new RuntimeException("Task status not found"));
+//        var task = taskMapper.map(taskData);
+//        task.setTaskStatus(taskStatus);
+//        taskRepository.save(task);
+//        var taskDTO = taskMapper.map(task);
+//        return taskDTO;
+//    }
+
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
