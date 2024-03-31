@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class TaskMapper {
-    @Mapping(target = "assignee.id", source = "assignee_id")
+    @Mapping(target = "assignee.id", source = "assigneeId")
     @Mapping(target = "name", source = "title")
     @Mapping(target = "description", source = "content")
     @Mapping(target = "labels", source = "taskLabelIds")
@@ -33,7 +33,7 @@ public abstract class TaskMapper {
     @Mapping(target = "description", source = "content")
     public abstract Task update(TaskUpdateDTO taskDto, @MappingTarget Task task);
 
-    @Mapping(target = "assignee_id", source = "assignee.id")
+    @Mapping(target = "assigneeId", source = "assignee.id")
     @Mapping(target = "title", source = "name")
     @Mapping(target = "content", source = "description")
     @Mapping(target = "status", source = "taskStatus.slug")

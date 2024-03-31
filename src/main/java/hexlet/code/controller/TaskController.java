@@ -57,38 +57,22 @@ public class TaskController {
                 .header("X-Total-Count", String.valueOf(result.stream().count())).body(result);
     }
 
-//    @PostMapping("")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
-//        var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus())
-//                .orElseThrow(() -> new RuntimeException("Task status not found"));
-//        var task = taskMapper.map(taskData);
-//        task.setTaskStatus(taskStatus);
-//        taskRepository.save(task);
-//        var taskDTO = taskMapper.map(task);
-//        return taskDTO;
-//    }
-
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
         var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus())
                 .orElseThrow(() -> new RuntimeException("Task status not found"));
-
-        // Получаем пользователя по его идентификатору
-        User assignee = userRepository.findById(taskData.getAssignee_id())
-                .orElseThrow(() -> new RuntimeException("Assignee not found"));
-
         var task = taskMapper.map(taskData);
+
+        if(taskData.getAssigneeId() == null) {
+            task.setAssignee(null);
+        }
         task.setTaskStatus(taskStatus);
-        // Устанавливаем пользователя в задачу
-        task.setAssignee(assignee);
 
         taskRepository.save(task);
         var taskDTO = taskMapper.map(task);
         return taskDTO;
     }
-
 
 
     public class BadRequestException extends RuntimeException {

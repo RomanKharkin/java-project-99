@@ -1,11 +1,14 @@
 package hexlet.code.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.openapitools.jackson.nullable.JsonNullable;
+import org.springframework.lang.Nullable;
 
 import java.util.Set;
 
@@ -14,11 +17,9 @@ import java.util.Set;
 public class TaskCreateDTO {
     private Integer index;
 
-    @NotNull
-    @SuppressWarnings("checkstyle:MemberName")
-    private Long assignee_id;
+    @JsonProperty("assignee_id")
+    private Long assigneeId;
 
-    @NotBlank
     private String content;
 
     private String status;

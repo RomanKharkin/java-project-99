@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(
         uses = {JsonNullableMapper.class},
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL,
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )

@@ -1,6 +1,7 @@
 package hexlet.code.model;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -34,14 +35,13 @@ public class Task implements BaseEntity {
 
     private Integer index;
 
-    @NotBlank
     private String description;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private TaskStatus taskStatus;
 
     @ManyToOne
-    @NotNull
+    @Nullable
     private User assignee;
 
     @NotBlank
