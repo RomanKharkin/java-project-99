@@ -6,7 +6,7 @@ import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
-import hexlet.code.model.User;
+import hexlet.code.exception.ApiException.*;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.TaskStatusRepository;
@@ -61,7 +61,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
         var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus())
-                .orElseThrow(() -> new RuntimeException("Task status not found"));
+                .orElseThrow(() -> new BadRequestException("Task status not found"));
         var task = taskMapper.map(taskData);
 
         if(taskData.getAssigneeId() == null) {
@@ -72,13 +72,6 @@ public class TaskController {
         taskRepository.save(task);
         var taskDTO = taskMapper.map(task);
         return taskDTO;
-    }
-
-
-    public class BadRequestException extends RuntimeException {
-        public BadRequestException(String message) {
-            super(message);
-        }
     }
 
     @GetMapping("/{id}")

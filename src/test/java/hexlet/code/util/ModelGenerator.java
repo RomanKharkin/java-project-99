@@ -29,7 +29,12 @@ public class ModelGenerator {
     private Model<Task> taskModel;
     private Model<Label> labelModel;
 
-    Faker faker = new Faker();
+    private final Faker faker;
+
+    @Autowired
+    public ModelGenerator(Faker faker) {
+        this.faker = faker;
+    }
 
     @PostConstruct
     private void init() {

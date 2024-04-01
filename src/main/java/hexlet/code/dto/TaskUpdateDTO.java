@@ -16,10 +16,8 @@ public class TaskUpdateDTO {
         @JsonProperty("assignee_id")
         private JsonNullable<Long> assigneeId;
 
-
         private JsonNullable<String> content;
 
-        @JoinColumn(unique = true)
         private JsonNullable<String> slug;
 
         private JsonNullable<LabelDTO> label;

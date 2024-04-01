@@ -20,8 +20,8 @@ public class UserUtils {
         return userRepository.findByEmail(email).get();
     }
 
-    public boolean isSelf(long postId) {
-        var puserSafe = userRepository.findById(postId).get().getEmail();
+    public boolean isSelf(long userId) {
+        var puserSafe = userRepository.findById(userId).get().getEmail();
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         return puserSafe.equals(authentication.getName());
     }

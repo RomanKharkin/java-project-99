@@ -53,7 +53,6 @@ public class Task implements BaseEntity {
     @CreatedDate
     private LocalDate createdAt;
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }

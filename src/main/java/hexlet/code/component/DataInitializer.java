@@ -29,6 +29,8 @@ import java.util.stream.IntStream;
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
+    private final Faker faker;
+
     private final UserRepository userRepository;
 
     private final TaskStatusRepository taskStatusRepository;
@@ -86,9 +88,6 @@ public class DataInitializer implements ApplicationRunner {
         labelCreateDTO.setName("bug");
         var label2 = labelMapper.map(labelCreateDTO);
         labelRepository.save(label2);
-
-
-        var faker = new Faker();
 
         IntStream.range(1, 10).forEach(i -> {
             var label = new Label();
