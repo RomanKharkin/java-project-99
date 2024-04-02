@@ -10,6 +10,9 @@ import hexlet.code.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.MappingTarget;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -69,6 +72,9 @@ public class UserController {
     UserDTO update(@RequestBody @Valid UserUpdateDTO userData, @PathVariable Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
+        if (userData.getEmail() == null) {
+            userData.setEmail(JsonNullable.of(user.getEmail()));
+        }
         userMapper.update(userData, user);
         userRepository.save(user);
         var userDTO = userMapper.map(user);
