@@ -39,8 +39,8 @@ public class User implements BaseEntity, UserDetails {
 
     private String lastName;
 
-    @Email
-    @Column(unique = true)
+//    @Email
+//    @Column(unique = true)
     private String email;
 
     private String passwordDigest;
