@@ -4,13 +4,7 @@ import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.dto.UserUpdateDTO;
 import hexlet.code.model.User;
-import org.mapstruct.BeforeMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,4 +42,11 @@ public abstract class UserMapper {
 
     @Mapping(source = "password", target = "passwordDigest")
     public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
+
+    @AfterMapping
+    protected void enrichDtoWithNonUpdatedFields(User model, @MappingTarget UserDTO dto) {
+        if (dto.getEmail() == null) {
+            dto.setEmail(model.getEmail());
+        }
+    }
 }
