@@ -43,7 +43,6 @@ public class User implements BaseEntity, UserDetails {
     @Column(unique = true)
     private String email;
 
-    @NotBlank
     private String passwordDigest;
 
     @CreatedDate

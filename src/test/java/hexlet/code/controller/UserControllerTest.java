@@ -139,6 +139,27 @@ class UserControllerTest {
         assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
+    @Test
+    public void testPartialUpdate() throws Exception {
+        userRepository.save(testUser);
+
+        var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
+        userUpdateDto.setPassword(null);
+
+        var request = put("/api/users/{id}", testUser.getId()).with(user(testUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(userUpdateDto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var user = userRepository.findById(testUser.getId())
+                .orElseThrow(() -> new AssertionError("User not found"));
+
+        assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
+        assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
+        assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
+    }
 
     @Test
     public void testDestroy() throws Exception {
