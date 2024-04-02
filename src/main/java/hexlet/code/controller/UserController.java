@@ -75,6 +75,12 @@ public class UserController {
         if (userData.getEmail() == null) {
             userData.setEmail(JsonNullable.of(user.getEmail()));
         }
+        if (userData.getFirstName() == null) {
+            userData.setFirstName(JsonNullable.of(user.getFirstName()));
+        }
+        if (userData.getLastName() == null) {
+            userData.setLastName(JsonNullable.of(user.getLastName()));
+        }
         userMapper.update(userData, user);
         userRepository.save(user);
         var userDTO = userMapper.map(user);
