@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -62,12 +63,16 @@ public class TaskController {
     TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
         var taskStatus = taskStatusRepository.findBySlug(taskData.getStatus())
                 .orElseThrow(() -> new BadRequestException("Task status not found"));
+        Set<Long> labelIds = taskData.getTaskLabelIds();
         var task = taskMapper.map(taskData);
 
         task.setTaskStatus(taskStatus);
 
         taskRepository.save(task);
         var taskDTO = taskMapper.map(task);
+
+        taskDTO.setTaskLabelIds(labelIds);
+
         return taskDTO;
     }
 
