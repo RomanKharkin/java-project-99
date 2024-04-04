@@ -72,15 +72,6 @@ public class UserController {
     UserDTO update(@RequestBody @Valid UserUpdateDTO userData, @PathVariable Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
-        if (userData.getEmail() == null) {
-            userData.setEmail(JsonNullable.of(user.getEmail()));
-        }
-        if (userData.getFirstName() == null) {
-            userData.setFirstName(JsonNullable.of(user.getFirstName()));
-        }
-        if (userData.getLastName() == null) {
-            userData.setLastName(JsonNullable.of(user.getLastName()));
-        }
         userMapper.update(userData, user);
         userRepository.save(user);
         var userDTO = userMapper.map(user);

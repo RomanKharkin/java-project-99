@@ -1,26 +1,19 @@
 package hexlet.code.model;
 
 
-import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
-import java.util.Set;
-import java.util.HashSet;
+
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -41,8 +34,9 @@ public class Task implements BaseEntity {
     private TaskStatus taskStatus;
 
     @ManyToOne
-    @Nullable
     private User assignee;
+
+    //private long assigneeId;
 
     @NotBlank
     private String name;

@@ -139,12 +139,37 @@ class UserControllerTest {
         assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
+//    @Test
+//    public void testWithoutPasswordUpdate() throws Exception {
+//        userRepository.save(testUser);
+//
+//        var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
+//        userUpdateDto.setPassword(null);
+//
+//        var request = put("/api/users/{id}", testUser.getId()).with(user(testUser))
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(om.writeValueAsString(userUpdateDto));
+//
+//        mockMvc.perform(request)
+//                .andExpect(status().isOk());
+//
+//        var user = userRepository.findById(testUser.getId())
+//                .orElseThrow(() -> new AssertionError("User not found"));
+//
+//        assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
+//        assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
+//        assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
+//        assertThat(passwordEncoder.encode(user.getPasswordDigest()) != null).isTrue();
+//    }
+
     @Test
-    public void testPartialUpdate() throws Exception {
+    public void testWithoutEmailUpdate() throws Exception {
         userRepository.save(testUser);
 
+        var emailOriginal = testUser.getEmail();
+
         var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
-        userUpdateDto.setPassword(null);
+        userUpdateDto.setEmail(null);
 
         var request = put("/api/users/{id}", testUser.getId()).with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,9 +181,60 @@ class UserControllerTest {
         var user = userRepository.findById(testUser.getId())
                 .orElseThrow(() -> new AssertionError("User not found"));
 
+        assertThat(user.getEmail()).isEqualTo(emailOriginal);
         assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
         assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
+    }
+
+    @Test
+    public void testWithoutFirstNamedUpdate() throws Exception {
+        userRepository.save(testUser);
+
+        var firstNameOriginal = testUser.getFirstName();
+
+        var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
+        userUpdateDto.setFirstName(null);
+
+        var request = put("/api/users/{id}", testUser.getId()).with(user(testUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(userUpdateDto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var user = userRepository.findById(testUser.getId())
+                .orElseThrow(() -> new AssertionError("User not found"));
+
+        assertThat(user.getFirstName()).isEqualTo(firstNameOriginal);
+        assertThat(user.getLastName()).isEqualTo(userUpdateDto.getLastName().get());
         assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
+    }
+
+    @Test
+    public void testWithoutLastNameUpdate() throws Exception {
+        userRepository.save(testUser);
+
+        var lastNameOriginal = testUser.getLastName();
+
+        var userUpdateDto = Instancio.of(modelGenerator.getUserUpdateDTOModel()).create();
+        userUpdateDto.setLastName(null);
+
+        var request = put("/api/users/{id}", testUser.getId()).with(user(testUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(userUpdateDto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var user = userRepository.findById(testUser.getId())
+                .orElseThrow(() -> new AssertionError("User not found"));
+
+        assertThat(user.getLastName()).isEqualTo(lastNameOriginal);
+        assertThat(user.getFirstName()).isEqualTo(userUpdateDto.getFirstName().get());
+        assertThat(user.getEmail()).isEqualTo(userUpdateDto.getEmail().get());
+        assertThat(passwordEncoder.matches(userUpdateDto.getPassword().get(), user.getPasswordDigest())).isTrue();
     }
 
     @Test

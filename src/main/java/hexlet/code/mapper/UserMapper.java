@@ -47,5 +47,18 @@ public abstract class UserMapper {
     public abstract UserDTO map(User model);
 
     @Mapping(source = "password", target = "passwordDigest")
-    public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
+    public void update(UserUpdateDTO dto, @MappingTarget User model) {
+        if (dto.getFirstName().isPresent()) {
+            model.setFirstName(dto.getFirstName().get());
+        }
+        if (dto.getLastName().isPresent()) {
+            model.setLastName(dto.getLastName().get());
+        }
+        if (dto.getEmail().isPresent()) {
+            model.setEmail(dto.getEmail().get());
+        }
+        if (dto.getPassword().isPresent()) {
+            model.setPasswordDigest(passwordEncoder.encode(dto.getPassword().get()));
+        }
+    }
 }

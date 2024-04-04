@@ -61,17 +61,4 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
-
-
-//   @Bean
-//   public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
-//            throws Exception {
-//        return http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-//
-//                .build();
-//    }
-
-
 }

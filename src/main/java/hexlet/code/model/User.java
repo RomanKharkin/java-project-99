@@ -1,14 +1,7 @@
 package hexlet.code.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -53,6 +46,13 @@ public class User implements BaseEntity, UserDetails {
 
     @OneToMany(mappedBy = "assignee")
     private List<Task> tasks = new ArrayList<>();
+
+    public User(long id) {
+        this.id = id;
+    }
+
+    public User() {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

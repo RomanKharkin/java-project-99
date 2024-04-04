@@ -64,9 +64,6 @@ public class TaskController {
                 .orElseThrow(() -> new BadRequestException("Task status not found"));
         var task = taskMapper.map(taskData);
 
-        if(taskData.getAssigneeId() == null) {
-            task.setAssignee(null);
-        }
         task.setTaskStatus(taskStatus);
 
         taskRepository.save(task);
@@ -97,8 +94,6 @@ public class TaskController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable Long id) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         taskRepository.deleteById(id);
     }
 }

@@ -197,7 +197,7 @@ public class TaskControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        testTask.setName("UnniqueName12312sd");
+        testTask.setName("UniqueName123");
         var dto = mapper.map(testTask);
         var request = post("/api/tasks").with(user(testUser))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -206,6 +206,21 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated());
 
        var task = taskRepository.findByName(testTask.getName());
+        assertThat(task.isPresent()).isTrue();
+    }
+
+    @Test
+    public void testWithoutAssigneeCreate() throws Exception {
+        testTask.setAssignee(null);
+        var dto = mapper.map(testTask);
+
+        var request = post("/api/tasks").with(user(testUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+        mockMvc.perform(request)
+                .andExpect(status().isCreated());
+
+        var task = taskRepository.findById(testTask.getId());
         assertThat(task.isPresent()).isTrue();
     }
 

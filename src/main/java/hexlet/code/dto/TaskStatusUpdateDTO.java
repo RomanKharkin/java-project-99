@@ -13,6 +13,5 @@ public class TaskStatusUpdateDTO {
     private JsonNullable<String> name;
 
     @NotBlank
-    @Column(unique = true)
     private JsonNullable<String> slug;
 }
