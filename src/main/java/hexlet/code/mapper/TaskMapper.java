@@ -40,9 +40,9 @@ public abstract class TaskMapper {
     @Mapping(target = "status", source = "taskStatus.slug")
     public abstract TaskDTO map(Task model);
 
-//    Set<Long> map(Set<Label> value) {
-//        return value.stream().map(Label::getId).collect(Collectors.toSet());
-//    }
+    Set<Long> map(Set<Label> value) {
+        return value.stream().map(Label::getId).collect(Collectors.toSet());
+    }
 
     Set<Label> mapTaskLabelIdsToLabels(Set<Long> taskLabelIds) {
         if (taskLabelIds == null) {
