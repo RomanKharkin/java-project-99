@@ -36,8 +36,6 @@ public class Task implements BaseEntity {
     @ManyToOne
     private User assignee;
 
-    //private long assigneeId;
-
     @NotBlank
     private String name;
 
