@@ -11,6 +11,7 @@ import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,10 +50,7 @@ public abstract class TaskMapper {
         if (taskLabelIds == null) {
             return Collections.emptySet();
         }
-        return taskLabelIds.stream()
-                .map(labelRepository::findById)
-                .map(optional -> optional.orElseThrow(() -> new RuntimeException("Label not found")))
-                .collect(Collectors.toSet());
+        return new HashSet<>(labelRepository.findByIdIn(taskLabelIds));
     }
 
     protected User mapAssignee(Long assigneeId) {

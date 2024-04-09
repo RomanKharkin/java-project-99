@@ -11,9 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -45,7 +43,7 @@ public class User implements BaseEntity, UserDetails {
     private LocalDate updatedAt;
 
     @OneToMany(mappedBy = "assignee")
-    private List<Task> tasks = new ArrayList<>();
+    private Set<Task> tasks = new HashSet<>();
 
     public User(long id) {
         this.id = id;
