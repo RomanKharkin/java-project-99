@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -30,10 +31,10 @@ public class Task implements BaseEntity {
 
     private String description;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = LAZY)
     private TaskStatus taskStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private User assignee;
 
     @NotBlank
