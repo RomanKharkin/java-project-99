@@ -49,9 +49,13 @@ public class DataInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         userRepository.deleteAll();
+        userRepository.flush();
         taskStatusRepository.deleteAll();
+        taskStatusRepository.flush();
         taskRepository.deleteAll();
+        taskRepository.flush();
         labelRepository.deleteAll();
+        labelRepository.flush();
 
         var userData = new UserCreateDTO();
         userData.setEmail("hexlet@example.com");
