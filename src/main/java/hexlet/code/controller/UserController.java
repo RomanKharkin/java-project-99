@@ -82,8 +82,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("@userUtils.isSelf(#id)")
     void delete(@PathVariable Long id) {
-        var task = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         userRepository.deleteById(id);
     }
 }

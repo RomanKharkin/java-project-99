@@ -167,7 +167,7 @@ public class TaskControllerTest {
         task.setName("TestTitle");
         taskRepository.save(task);
 
-        var result = mockMvc.perform(get("/api/tasks?TitleCont=TestTitle").with(user(testUser)))
+        var result = mockMvc.perform(get("/api/tasks?titleCont=TestTitle").with(user(testUser)))
                 .andExpect(status().isOk())
                 .andReturn();
 
