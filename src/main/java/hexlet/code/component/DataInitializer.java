@@ -50,10 +50,10 @@ public class DataInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         taskRepository.deleteAll();
         taskRepository.flush();
-        taskStatusRepository.deleteAll();
-        taskStatusRepository.flush();
         labelRepository.deleteAll();
         labelRepository.flush();
+        taskStatusRepository.deleteAll();
+        taskStatusRepository.flush();
         userRepository.deleteAll();
         userRepository.flush();
 
